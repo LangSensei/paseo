@@ -1,7 +1,9 @@
 # Diff Find on current main
 
-Feature commit: `d4796922c9f00211d4405283f29235237231d36d`.
-Base: `047f40e62356f091a081be6b4b9db32872957d0c`.
+Feature commit: `7ba666dc6686228538881996b1fdd1c3ce1ecb35`.
+Base: `bb4763b38cb6d8e26b0eca54088fb14ce899ec68`.
+
+The 16-scenario verification was completed on `047f40e6`. Main then added only the chat Find capture-phase fix (#4991). After rebasing, full-workspace format/lint/typecheck and all 97 targeted unit tests passed again; the Diff highlight and chat/terminal coexistence cases also passed, with normal chat activation and no explicit content-focus workaround.
 
 This is the shared PaneFind implementation rebased onto main after #4589, #4650 and #4765 merged. The feature is one commit; the old replay stack and local test-runner configuration are not included.
 
@@ -14,11 +16,12 @@ This is the shared PaneFind implementation rebased onto main after #4589, #4650 
 
 ## Raw command output
 
-Only local checkout paths have been replaced with `$WORKTREE`/`$DELIVERY`. These are not synthetic test summaries.
+Local checkout paths have been replaced with `$WORKTREE`/`$DELIVERY`, and ANSI color escapes removed for readability. Test names, results and failures are retained; these are not synthetic summaries.
 
 - [Build, lint, typecheck, 97 unit tests](static-and-unit.txt)
 - [Final 16-case browser batch, including setup timeout](browser-batch.txt)
 - [Unchanged targeted rerun of the remaining scenario](browser-rerun.txt)
+- [Final highlight/chat/terminal checks after #4991](final-focus-regressions.txt)
 
 Local startup used a temporary optional harness patch for a longer Metro warmup; it was removed from the publishable branch. Functional assertions were unchanged. Cold prewarming ran separately from the browser tests. The test service had a 3GiB group hard cap; final runs recorded no cgroup OOM kills.
 
@@ -36,7 +39,7 @@ All content below comes from generated test workspaces.
 
 [Browser recording](diff-chat-find.webm)
 
-The test explicitly focuses the chat content host after activating that pane; existing composer autofocus on chat activation is not changed by this PR.
+The final test uses the normal chat pane activation/composer autofocus behavior supported by main's #4991; it does not move focus to an internal chat host.
 
 ### Independent Diff and terminal Find
 

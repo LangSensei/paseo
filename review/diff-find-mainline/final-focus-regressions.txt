@@ -1,0 +1,71 @@
+Started: 2026-09-17T09:00:31+00:00
+Worktree: $WORKTREE
+Unit: paseo-diff-test-20260917T090031Z-512981
+Command: bash -c npm\ run\ format:files\ --\ packages/app/e2e/browser/changes-pane.spec.ts\ \&\&\ npm\ run\ lint\ --\ packages/app/e2e/browser/changes-pane.spec.ts\ \&\&\ npm\ run\ typecheck\ --workspace=@getpaseo/app\ \&\&\ NODE_OPTIONS=--max-old-space-size=1536\ E2E_RECORD_VIDEO=1\ npm\ run\ test:e2e\ --workspace=@getpaseo/app\ --\ e2e/browser/changes-pane.spec.ts\ e2e/browser/chat-find.spec.ts\ --grep\ \"Diff\ Find\ stays\ isolated\|Diff\ Find\ paints\ literal\|opens\ chat\ Find\ from\ the\ focused\ composer\"\ --workers=1\ --timeout=120000
+Running as unit: paseo-diff-test-20260917T090031Z-512981.service
+
+> paseo@0.8.0 format:files
+> oxfmt packages/app/e2e/browser/changes-pane.spec.ts
+
+Finished in 23ms on 1 files using 1 threads.
+
+> paseo@0.8.0 lint
+> oxlint packages/app/e2e/browser/changes-pane.spec.ts
+
+Found 0 warnings and 0 errors.
+Finished in 198ms on 1 file with 177 rules using 1 threads.
+
+> @getpaseo/app@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/app@0.8.0 test:e2e
+> playwright test --project=browser e2e/browser/changes-pane.spec.ts e2e/browser/chat-find.spec.ts --grep Diff Find stays isolated|Diff Find paints literal|opens chat Find from the focused composer --workers=1 --timeout=120000
+
+[metro] Starting project at $WORKTREE/packages/app
+[metro] Using src/app as the root directory for Expo Router.
+[metro] Experimental Expo Autolinking module resolver is enabled.
+[metro] React Compiler enabled
+[metro] Starting Metro Bundler
+[metro] Waiting on http://localhost:11089
+[metro] Logs for your project will appear below.
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓▓░░░░░░░ 61.2% (1891/2418)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 94.1% (4761/4908)
+[metro] Web Bundled 9559ms packages/app/index.ts (5165 modules)
+[e2e] Metro warmed on port 11089
+
+Running 3 tests using 1 worker
+
+[e2e] Worker 0 daemon started on port 18615, home: /tmp/paseo-e2e-worker-0-Z0EfTL
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 612ms packages/app/index.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+[metro] Web Bundled 528ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (86 modules)
+  ✓  1 [browser] › e2e/browser/changes-pane.spec.ts:270:5 › Diff Find paints literal matches without changing copy selection (41.2s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 445ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 31ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  2 [browser] › e2e/browser/changes-pane.spec.ts:398:5 › Diff Find stays isolated from chat Find in a neighboring pane (32.0s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 360ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 79ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  3 [browser] › e2e/browser/changes-pane.spec.ts:437:5 › Diff Find stays isolated from terminal Find and shell input (27.5s)
+[e2e] Worker 0 daemon stopped
+[e2e] Metro stopped
+
+  3 passed (2.5m)
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 3min 32.209s
+CPU time consumed: 3min 25.882s
+Memory peak: 192.9M
+Memory swap peak: 0B
+Observed cgroup peak: 3007.9 MiB; OOM kills: 0
+
+Finished: 2026-09-17T09:04:03+00:00
+Exit: 0

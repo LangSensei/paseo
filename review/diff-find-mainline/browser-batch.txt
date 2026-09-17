@@ -122,7 +122,7 @@ Running 16 tests using 1 worker
 
   1) [browser] › e2e/browser/changes-pane.spec.ts:270:5 › Diff Find paints literal matches without changing copy selection 
 
-    [31mFixture "e2eWorkerClient" timeout of 120000ms exceeded during setup.[39m
+    Fixture "e2eWorkerClient" timeout of 120000ms exceeded during setup.
 
        at ../support/fixtures.ts:35
 
