@@ -2,6 +2,27 @@ import { en, type TranslationResources } from "./en";
 import { pluginSettings } from "./plugin-settings";
 
 export const ru: TranslationResources = {
+  diffFind: {
+    title: "Найти в изменениях",
+    searching: "Поиск...",
+    scope: "Только текст текущих изменений",
+    skipped: "Исключено двоичных или слишком больших файлов: {{count}}",
+  },
+  diffFindControls: {
+    title: "Найти",
+    placeholder: "Найти в панели",
+    close: "Закрыть поиск",
+    matches: "Совпадения",
+    previous: "Предыдущее совпадение",
+    next: "Следующее совпадение",
+    toggleReplace: "Показать замену",
+    replaceWith: "Заменить на",
+    replace: "Заменить",
+    replaceAll: "Заменить всё",
+    noMatches: "Нет совпадений",
+    position: "{{current}} из {{total}}",
+    total: "Совпадений: {{total}}",
+  },
   common: {
     back: "Назад",
     loading: "Загрузка...",

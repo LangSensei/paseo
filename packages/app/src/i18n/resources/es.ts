@@ -2,6 +2,27 @@ import { en, type TranslationResources } from "./en";
 import { pluginSettings } from "./plugin-settings";
 
 export const es: TranslationResources = {
+  diffFind: {
+    title: "Buscar en el diff",
+    searching: "Buscando...",
+    scope: "Solo el texto del diff actual",
+    skipped: "{{count}} archivos binarios o demasiado grandes excluidos",
+  },
+  diffFindControls: {
+    title: "Buscar",
+    placeholder: "Buscar en el panel",
+    close: "Cerrar búsqueda",
+    matches: "Coincidencias",
+    previous: "Coincidencia anterior",
+    next: "Siguiente coincidencia",
+    toggleReplace: "Mostrar reemplazo",
+    replaceWith: "Reemplazar con",
+    replace: "Reemplazar",
+    replaceAll: "Reemplazar todo",
+    noMatches: "Sin coincidencias",
+    position: "{{current}} de {{total}}",
+    total: "{{total}} coincidencias",
+  },
   common: {
     back: "Atrás",
     loading: "Cargando...",

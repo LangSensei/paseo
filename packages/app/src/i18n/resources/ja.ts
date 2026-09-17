@@ -2,6 +2,27 @@ import { en, type TranslationResources } from "./en";
 import { pluginSettings } from "./plugin-settings";
 
 export const ja: TranslationResources = {
+  diffFind: {
+    title: "差分内を検索",
+    searching: "検索中...",
+    scope: "現在の差分テキストのみ",
+    skipped: "バイナリまたは大きすぎるファイル {{count}} 件を除外",
+  },
+  diffFindControls: {
+    title: "検索",
+    placeholder: "ペイン内を検索",
+    close: "検索を閉じる",
+    matches: "検索結果",
+    previous: "前の一致",
+    next: "次の一致",
+    toggleReplace: "置換を切り替え",
+    replaceWith: "置換後の文字列",
+    replace: "置換",
+    replaceAll: "すべて置換",
+    noMatches: "一致なし",
+    position: "{{current}} / {{total}}",
+    total: "{{total}} 件の一致",
+  },
   common: {
     back: "戻る",
     loading: "読み込み中...",
