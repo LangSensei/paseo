@@ -125,11 +125,37 @@ export async function waitForMetro(port: number, options: WaitForServerOptions):
   await waitForServer(port, options, probeMetro);
 }
 
-function startMetro(port: number, buffer: ReturnType<typeof createLineBuffer>): ChildProcess {
+export function metroStartupOptions(env: Record<string, string | undefined>) {
+  function positiveInteger(name: string, fallback: number): number {
+    const value = env[name] === undefined ? fallback : Number(env[name]);
+    if (!Number.isSafeInteger(value) || value <= 0)
+      throw new RangeError(`${name} must be a positive integer`);
+    return value;
+  }
+  return {
+    timeoutMs: positiveInteger("PASEO_E2E_STARTUP_TIMEOUT_MS", 120_000),
+    maxWorkers:
+      env.PASEO_E2E_METRO_WORKERS === undefined
+        ? undefined
+        : positiveInteger("PASEO_E2E_METRO_WORKERS", 1),
+  };
+}
+
+function startMetro({
+  port,
+  buffer,
+  maxWorkers,
+}: {
+  port: number;
+  buffer: ReturnType<typeof createLineBuffer>;
+  maxWorkers: number | undefined;
+}): ChildProcess {
   const appDir = path.resolve(__dirname, "../..");
   const expoCli = require.resolve("expo/bin/cli");
   // Spawns Node directly to bypass Windows .cmd shim execution restrictions without shell: true.
-  const child = spawn(process.execPath, [expoCli, "start", "--web", "--port", String(port)], {
+  const args = [expoCli, "start", "--web", "--port", String(port)];
+  if (maxWorkers !== undefined) args.push("--max-workers", String(maxWorkers));
+  const child = spawn(process.execPath, args, {
     cwd: appDir,
     env: {
       ...process.env,
@@ -165,19 +191,24 @@ export default async function globalSetup() {
   const repoRoot = path.resolve(__dirname, "../../../..");
   await loadHarnessEnvironment(repoRoot);
 
+  const startup = metroStartupOptions(process.env);
   const metroPort = await getAvailableE2EPort();
   const metroOutput = createLineBuffer();
   let metroProcess: ChildProcess | null = null;
 
   try {
-    metroProcess = startMetro(metroPort, metroOutput);
+    metroProcess = startMetro({
+      port: metroPort,
+      buffer: metroOutput,
+      maxWorkers: startup.maxWorkers,
+    });
     await waitForMetro(metroPort, {
       label: "Metro web server",
-      timeoutMs: 120_000,
+      timeoutMs: startup.timeoutMs,
       childProcess: metroProcess,
       getRecentOutput: metroOutput.dump,
     });
-    await warmMetro(metroPort);
+    await warmMetro(metroPort, { timeoutMs: startup.timeoutMs });
     process.env.E2E_METRO_PORT = String(metroPort);
     console.log(`[e2e] Metro warmed on port ${metroPort}`);
 

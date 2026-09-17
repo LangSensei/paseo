@@ -1,7 +1,7 @@
 import { createServer, type Server } from "node:http";
 import { afterEach, expect, test } from "vitest";
 
-import { waitForMetro, warmMetro } from "../e2e/support/global-setup";
+import { metroStartupOptions, waitForMetro, warmMetro } from "../e2e/support/global-setup";
 
 class MetroPort {
   private readonly responses = new Map<string, { status: number; body: string }>();
@@ -63,6 +63,17 @@ afterEach(async () => {
   endpoint = null;
 });
 
+test("Metro resource options preserve defaults and accept a low-resource profile", () => {
+  expect(metroStartupOptions({})).toEqual({ timeoutMs: 120_000, maxWorkers: undefined });
+  expect(
+    metroStartupOptions({ PASEO_E2E_STARTUP_TIMEOUT_MS: "600000", PASEO_E2E_METRO_WORKERS: "1" }),
+  ).toEqual({ timeoutMs: 600_000, maxWorkers: 1 });
+  expect(() => metroStartupOptions({ PASEO_E2E_METRO_WORKERS: "0" })).toThrow(RangeError);
+  expect(() => metroStartupOptions({ PASEO_E2E_STARTUP_TIMEOUT_MS: "invalid" })).toThrow(
+    RangeError,
+  );
+});
+
 test("Metro readiness rejects another HTTP listener on the selected port", async () => {
   endpoint = await MetroPort.listen();
 
@@ -80,7 +91,7 @@ test("Metro warmup compiles the document's same-origin scripts before tests star
   endpoint = await MetroPort.listen();
   endpoint.serveWarmableDocument();
 
-  await warmMetro(endpoint.port);
+  await warmMetro(endpoint.port, { timeoutMs: 600_000 });
 
   expect(endpoint.requests).toEqual(["/", "/index.bundle"]);
 });

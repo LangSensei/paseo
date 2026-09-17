@@ -1,7 +1,10 @@
-/** @param {number} port */
-export async function warmMetro(port) {
+/**
+ * @param {number} port
+ * @param {{timeoutMs?: number}} [options]
+ */
+export async function warmMetro(port, { timeoutMs = 120_000 } = {}) {
   const origin = `http://127.0.0.1:${port}`;
-  const documentResponse = await fetch(origin, { signal: AbortSignal.timeout(120_000) });
+  const documentResponse = await fetch(origin, { signal: AbortSignal.timeout(timeoutMs) });
   if (!documentResponse.ok) {
     throw new Error(`Metro document warmup failed with HTTP ${documentResponse.status}`);
   }
@@ -15,7 +18,7 @@ export async function warmMetro(port) {
   for (const source of scriptSources) {
     const scriptUrl = new URL(source, origin);
     if (scriptUrl.origin !== origin) continue;
-    const response = await fetch(scriptUrl, { signal: AbortSignal.timeout(120_000) });
+    const response = await fetch(scriptUrl, { signal: AbortSignal.timeout(timeoutMs) });
     if (!response.ok) {
       throw new Error(
         `Metro bundle warmup failed for ${scriptUrl.pathname}: HTTP ${response.status}`,
