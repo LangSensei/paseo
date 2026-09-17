@@ -1,0 +1,45 @@
+Started: 2026-09-17T08:46:27+00:00
+Worktree: $WORKTREE
+Unit: paseo-diff-test-20260917T084627Z-509450
+Command: env NODE_OPTIONS=--max-old-space-size=1536 E2E_RECORD_VIDEO=1 npm run test:e2e --workspace=@getpaseo/app -- e2e/browser/changes-pane.spec.ts --grep Diff\ Find\ paints\ literal --workers=1 --timeout=120000
+Running as unit: paseo-diff-test-20260917T084627Z-509450.service
+
+> @getpaseo/app@0.8.0 test:e2e
+> playwright test --project=browser e2e/browser/changes-pane.spec.ts --grep Diff Find paints literal --workers=1 --timeout=120000
+
+[metro] Starting project at $WORKTREE/packages/app
+[metro] Using src/app as the root directory for Expo Router.
+[metro] Experimental Expo Autolinking module resolver is enabled.
+[metro] React Compiler enabled
+[metro] Starting Metro Bundler
+[metro] Waiting on http://localhost:25475
+[metro] Logs for your project will appear below.
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓░░░░░░░░ 53.8% (1688/2302)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (5164/5164)
+[metro] Web Bundled 9006ms packages/app/index.ts (5165 modules)
+[e2e] Metro warmed on port 25475
+
+Running 1 test using 1 worker
+
+[e2e] Worker 0 daemon started on port 25195, home: /tmp/paseo-e2e-worker-0-yV2eav
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 496ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro]  LOG  [web] Logs will appear in the browser console
+[metro] Web Bundled 690ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (86 modules)
+  ✓  1 [browser] › e2e/browser/changes-pane.spec.ts:270:5 › Diff Find paints literal matches without changing copy selection (28.5s)
+[e2e] Worker 0 daemon stopped
+[e2e] Metro stopped
+
+  1 passed (1.3m)
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 1min 21.004s
+CPU time consumed: 1min 20.562s
+Memory peak: 114.1M
+Memory swap peak: 0B
+Observed cgroup peak: 2946.0 MiB; OOM kills: 0
+
+Finished: 2026-09-17T08:47:48+00:00
+Exit: 0

@@ -1,0 +1,178 @@
+Started: 2026-09-17T08:35:34+00:00
+Worktree: $WORKTREE
+Unit: paseo-diff-test-20260917T083534Z-502830
+Command: env NODE_OPTIONS=--max-old-space-size=1536 E2E_RECORD_VIDEO=1 npm run test:e2e --workspace=@getpaseo/app -- e2e/browser/changes-pane.spec.ts e2e/browser/commit-diff-panel.spec.ts e2e/browser/pane-find.spec.ts e2e/browser/chat-find.spec.ts e2e/browser/terminal-find.spec.ts --grep Diff\ Find\|commit\ history\ shows\ dates\|creates\,\ cancels\,\ edits\,\ and\ deletes\ a\ review\|selects\,\ preserves\,\ copies\,\ and\ dismisses\|searches\ retained\ output\ without\ sending\|rejects\ invisible\ source\ matches\|finds\ literal\ text\ at\ the\ top\|searches\ read-only\ source\ beyond\|targets\ the\ focused\ source\ in\ split\|keeps\ Find\ controls\ inside\ a\ narrow --workers=1 --timeout=120000
+Running as unit: paseo-diff-test-20260917T083534Z-502830.service
+
+> @getpaseo/app@0.8.0 test:e2e
+> playwright test --project=browser e2e/browser/changes-pane.spec.ts e2e/browser/commit-diff-panel.spec.ts e2e/browser/pane-find.spec.ts e2e/browser/chat-find.spec.ts e2e/browser/terminal-find.spec.ts --grep Diff Find|commit history shows dates|creates, cancels, edits, and deletes a review|selects, preserves, copies, and dismisses|searches retained output without sending|rejects invisible source matches|finds literal text at the top|searches read-only source beyond|targets the focused source in split|keeps Find controls inside a narrow --workers=1 --timeout=120000
+
+[metro] Starting project at $WORKTREE/packages/app
+[metro] Using src/app as the root directory for Expo Router.
+[metro] Experimental Expo Autolinking module resolver is enabled.
+[metro] React Compiler enabled
+[metro] Starting Metro Bundler
+[metro] Waiting on http://localhost:10297
+[metro] Logs for your project will appear below.
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓░░░░░░░░ 53.2% (1681/2305)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 94.2% (4715/4871)
+[metro] Web Bundled 10342ms packages/app/index.ts (5165 modules)
+[e2e] Metro warmed on port 10297
+
+Running 16 tests using 1 worker
+
+[e2e] Worker 0 daemon started on port 11287, home: /tmp/paseo-e2e-worker-0-Kdyio8
+[e2e] Worker 0 daemon stopped
+  ✘   1 [browser] › e2e/browser/changes-pane.spec.ts:270:5 › Diff Find paints literal matches without changing copy selection (6.1s)
+[e2e] Worker 1 daemon started on port 1959, home: /tmp/paseo-e2e-worker-1-HyAL2k
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 491ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro]  LOG  [web] Logs will appear in the browser console
+[metro] Web Bundled 607ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (86 modules)
+  ✓   2 [browser] › e2e/browser/changes-pane.spec.ts:310:5 › Diff Find reaches collapsed offscreen files and keeps counts across layouts (30.0s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 501ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 88ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   3 [browser] › e2e/browser/changes-pane.spec.ts:343:5 › Diff Find reveals long-line matches horizontally and after wrapping (24.5s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 360ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 16ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   4 [browser] › e2e/browser/changes-pane.spec.ts:370:5 › Diff Find does not steal file Find in a neighboring pane (27.2s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 385ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 51ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   5 [browser] › e2e/browser/changes-pane.spec.ts:398:5 › Diff Find stays isolated from chat Find in a neighboring pane (32.7s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 468ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 80ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   6 [browser] › e2e/browser/changes-pane.spec.ts:440:5 › Diff Find stays isolated from terminal Find and shell input (30.1s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 386ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 20ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   7 [browser] › e2e/browser/changes-pane.spec.ts:492:5 › Diff Find invalidates live results and searches removed text (25.0s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 407ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 28ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   8 [browser] › e2e/browser/changes-pane.spec.ts:1263:5 › creates, cancels, edits, and deletes a review while keeping Changes focused (26.3s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 390ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 57ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   9 [browser] › e2e/browser/changes-pane.spec.ts:1397:5 › selects, preserves, copies, and dismisses diff text without opening a review (26.8s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 395ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 34ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  10 [browser] › e2e/browser/chat-find.spec.ts:118:5 › rejects invisible source matches and ignores a late reply after closing (27.4s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 326ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 11ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  11 [browser] › e2e/browser/commit-diff-panel.spec.ts:29:5 › commit history shows dates and shares diff layout preferences (26.5s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 373ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 30ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  12 [browser] › e2e/browser/pane-find.spec.ts:83:5 › finds literal text at the top of editable source and returns focus at the inspected match (27.1s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 367ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 66ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  13 [browser] › e2e/browser/pane-find.spec.ts:148:5 › searches read-only source beyond the viewport without replace controls (24.5s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 337ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 21ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  14 [browser] › e2e/browser/pane-find.spec.ts:174:5 › targets the focused source in split panes and refocuses an open query (26.8s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 341ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 57ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  15 [browser] › e2e/browser/pane-find.spec.ts:207:7 › narrow touch browser › keeps Find controls inside a narrow source pane (23.8s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 590ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 66ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  16 [browser] › e2e/browser/terminal-find.spec.ts:251:5 › searches retained output without sending Find input to the shell (30.6s)
+[e2e] Worker 1 daemon stopped
+[e2e] Metro stopped
+
+
+  1) [browser] › e2e/browser/changes-pane.spec.ts:270:5 › Diff Find paints literal matches without changing copy selection 
+
+    [31mFixture "e2eWorkerClient" timeout of 120000ms exceeded during setup.[39m
+
+       at ../support/fixtures.ts:35
+
+      33 | });
+      34 |
+    > 35 | const daemonTest = metroTest.extend<
+         |                              ^
+      36 |   { projectOwnership: void },
+      37 |   {
+      38 |     e2eDaemonConfig: Record<string, unknown> | undefined;
+        at $WORKTREE/packages/app/e2e/support/fixtures.ts:35:30
+
+    TypeError: Cannot read properties of null (reading 'fetchWorkspaces')
+
+       at ../support/fixtures.ts:85
+
+      83 |     async ({ e2eWorkerClient }, provide, testInfo) => {
+      84 |       const before = new Set(
+    > 85 |         (await e2eWorkerClient.fetchWorkspaces()).entries.map((workspace) => workspace.projectId),
+         |                                ^
+      86 |       );
+      87 |
+      88 |       await provide();
+        at Object.exports.daemonTest.metroTest.extend.projectOwnership.auto ($WORKTREE/packages/app/e2e/support/fixtures.ts:85:32)
+
+    attachment #1: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/changes-pane-Diff-Find-pai-ecad3-out-changing-copy-selection-browser/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/changes-pane-Diff-Find-pai-ecad3-out-changing-copy-selection-browser/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [browser] › e2e/browser/changes-pane.spec.ts:270:5 › Diff Find paints literal matches without changing copy selection 
+  15 passed (10.6m)
+npm error Lifecycle script `test:e2e` failed with error:
+npm error code 1
+npm error path $WORKTREE/packages/app
+npm error workspace @getpaseo/app@0.8.0
+npm error location $WORKTREE/packages/app
+npm error command failed
+npm error command sh -c playwright test --project=browser e2e/browser/changes-pane.spec.ts e2e/browser/commit-diff-panel.spec.ts e2e/browser/pane-find.spec.ts e2e/browser/chat-find.spec.ts e2e/browser/terminal-find.spec.ts --grep 'Diff Find|commit history shows dates|creates, cancels, edits, and deletes a review|selects, preserves, copies, and dismisses|searches retained output without sending|rejects invisible source matches|finds literal text at the top|searches read-only source beyond|targets the focused source in split|keeps Find controls inside a narrow' --workers=1 --timeout=120000
+Finished with result: exit-code
+Main processes terminated with: code=exited/status=1
+Service runtime: 10min 38.555s
+CPU time consumed: 9min 28.882s
+Memory peak: 114.3M
+Memory swap peak: 0B
+Observed cgroup peak: 3046.4 MiB; OOM kills: 0
+
+Finished: 2026-09-17T08:46:12+00:00
+Exit: 1

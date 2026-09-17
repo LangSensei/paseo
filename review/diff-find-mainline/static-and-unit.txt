@@ -1,0 +1,132 @@
+Started: 2026-09-17T08:27:53+00:00
+Worktree: $WORKTREE
+Unit: paseo-diff-test-20260917T082753Z-499678
+Command: bash -c npm\ run\ build:client\ \&\&\ npm\ run\ build:plugin\ \&\&\ npm\ run\ build\ --workspace=@getpaseo/server\ \&\&\ npm\ run\ build\ --workspace=@getpaseo/cli\ \&\&\ npm\ run\ lint\ \&\&\ npm\ run\ typecheck\ \&\&\ npx\ vitest\ run\ packages/app/src/git/diff-document/find/model.test.ts\ packages/app/src/git/diff-document/model.test.ts\ packages/app/src/git/diff-document/hit-testing.test.ts\ packages/app/src/git/diff-document/range-geometry.test.ts\ packages/app/src/git/diff-document/paint.web.test.ts\ packages/app/src/git/diff-document/native-hit-testing.test.ts\ packages/app/src/i18n/resources.test.ts\ --bail=1\ --maxWorkers=1
+Running as unit: paseo-diff-test-20260917T082753Z-499678.service; invocation ID: fd9de12d90e2479a85e775d39264515e
+
+> paseo@0.8.0 build:client
+> npm run build --workspace=@getpaseo/client
+
+
+> @getpaseo/client@0.8.0 build
+> npm run build --workspace=@getpaseo/protocol && tsc -p tsconfig.json --incremental false
+
+
+> @getpaseo/protocol@0.8.0 prebuild
+> npm run generate:validators
+
+
+> @getpaseo/protocol@0.8.0 generate:validators
+> node scripts/generate-validation-aot.mjs
+
+generated src/generated/validation/ws-outbound.aot.ts from codegen/ws-outbound.compile.ts (WSOutboundMessageSchema)
+
+> @getpaseo/protocol@0.8.0 build
+> tsc -p tsconfig.json --incremental false
+
+
+> paseo@0.8.0 build:plugin
+> npm run build --workspace=@getpaseo/plugin
+
+
+> @getpaseo/plugin@0.8.0 build
+> tsc -p tsconfig.json --incremental false
+
+
+> @getpaseo/server@0.8.0 build
+> npm run build:lib && npm run build:scripts
+
+
+> @getpaseo/server@0.8.0 build:lib
+> tsc -p tsconfig.server.json --incremental false && node scripts/build-opencode-bridge-plugin.mjs && node -e "const fs=require('node:fs'); fs.mkdirSync('dist/server/server/speech/providers/local/sherpa/assets',{recursive:true}); fs.copyFileSync('src/server/speech/providers/local/sherpa/assets/silero_vad.onnx','dist/server/server/speech/providers/local/sherpa/assets/silero_vad.onnx'); fs.cpSync('src/terminal/shell-integration','dist/server/terminal/shell-integration',{recursive:true}); fs.cpSync('src/terminal/shell-integration','dist/src/terminal/shell-integration',{recursive:true}); fs.copyFileSync('src/terminal/terminal-ts-loader.mjs','dist/server/terminal/terminal-ts-loader.mjs'); fs.rmSync('dist/server/skills',{recursive:true,force:true}); fs.cpSync('../../skills','dist/server/skills',{recursive:true});"
+
+
+> @getpaseo/server@0.8.0 build:scripts
+> tsc -p tsconfig.scripts.json --incremental false && node -e "const fs=require('node:fs'); fs.mkdirSync('dist/scripts',{recursive:true}); fs.copyFileSync('scripts/mcp-stdio-socket-bridge-cli.mjs','dist/scripts/mcp-stdio-socket-bridge-cli.mjs');"
+
+
+> @getpaseo/cli@0.8.0 build
+> tsc -p tsconfig.json --incremental false
+
+
+> paseo@0.8.0 lint
+> oxlint
+
+Found 0 warnings and 0 errors.
+Finished in 6.6s on 4285 files with 177 rules using 1 threads.
+
+> paseo@0.8.0 typecheck
+> npm run typecheck --workspaces --if-present
+
+
+> @getpaseo/expo-two-way-audio@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/highlight@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/plugin@0.8.0 typecheck
+> tsgo --noEmit && tsgo -p tsconfig.examples.json --noEmit
+
+
+> @getpaseo/protocol@0.8.0 pretypecheck
+> npm run generate:validators
+
+
+> @getpaseo/protocol@0.8.0 generate:validators
+> node scripts/generate-validation-aot.mjs
+
+generated src/generated/validation/ws-outbound.aot.ts from codegen/ws-outbound.compile.ts (WSOutboundMessageSchema)
+
+> @getpaseo/protocol@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/client@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/server@0.8.0 typecheck
+> tsgo -p tsconfig.server.typecheck.json --noEmit
+
+
+> @getpaseo/app@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/relay@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/website@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/desktop@0.8.0 typecheck
+> tsgo --noEmit -p tsconfig.json
+
+
+> @getpaseo/cli@0.8.0 typecheck
+> tsgo --noEmit
+
+
+ RUN  v4.1.7 $WORKTREE
+
+
+ Test Files  7 passed (7)
+      Tests  97 passed (97)
+   Start at  08:31:36
+   Duration  3.72s (transform 1.21s, setup 0ms, import 1.54s, tests 833ms, environment 1ms)
+
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 3min 46.326s
+CPU time consumed: 3min 42.719s
+Memory peak: 113.5M
+Memory swap peak: 0B
+Observed cgroup peak: 2944.4 MiB; OOM kills: 0
+
+Finished: 2026-09-17T08:31:39+00:00
+Exit: 0
