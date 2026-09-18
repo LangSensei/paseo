@@ -1,0 +1,113 @@
+Started: 2026-09-18T01:21:58+00:00
+Worktree: $WORKTREE
+Unit: paseo-diff-test-20260918T012158Z-680013
+Command: bash -c npm\ run\ format\ \&\&\ npm\ run\ lint\ \&\&\ npm\ run\ typecheck\ \&\&\ NODE_OPTIONS=--max-old-space-size=1536\ E2E_RECORD_VIDEO=1\ npm\ run\ test:e2e\ --workspace=@getpaseo/app\ --\ e2e/browser/changes-pane.spec.ts\ --grep\ \"Diff\ Find\ stays\ isolated\ from\ terminal\"\ --workers=1\ --timeout=120000
+Running as unit: paseo-diff-test-20260918T012158Z-680013.service
+
+> paseo@0.8.0 format
+> oxfmt .
+
+Finished in 15782ms on 4574 files using 1 threads.
+
+> paseo@0.8.0 lint
+> oxlint
+
+Found 0 warnings and 0 errors.
+Finished in 7.1s on 4287 files with 177 rules using 1 threads.
+
+> paseo@0.8.0 typecheck
+> npm run typecheck --workspaces --if-present
+
+
+> @getpaseo/expo-two-way-audio@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/highlight@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/plugin@0.8.0 typecheck
+> tsgo --noEmit && tsgo -p tsconfig.examples.json --noEmit
+
+
+> @getpaseo/protocol@0.8.0 pretypecheck
+> npm run generate:validators
+
+
+> @getpaseo/protocol@0.8.0 generate:validators
+> node scripts/generate-validation-aot.mjs
+
+generated src/generated/validation/ws-outbound.aot.ts from codegen/ws-outbound.compile.ts (WSOutboundMessageSchema)
+
+> @getpaseo/protocol@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/client@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/server@0.8.0 typecheck
+> tsgo -p tsconfig.server.typecheck.json --noEmit
+
+
+> @getpaseo/app@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/relay@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/website@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/desktop@0.8.0 typecheck
+> tsgo --noEmit -p tsconfig.json
+
+
+> @getpaseo/cli@0.8.0 typecheck
+> tsgo --noEmit
+
+
+> @getpaseo/app@0.8.0 test:e2e
+> playwright test --project=browser e2e/browser/changes-pane.spec.ts --grep Diff Find stays isolated from terminal --workers=1 --timeout=120000
+
+[metro] Starting project at $WORKTREE/packages/app
+[metro] Using src/app as the root directory for Expo Router.
+[metro] Experimental Expo Autolinking module resolver is enabled.
+[metro] React Compiler enabled
+[metro] Starting Metro Bundler
+[metro] Waiting on http://localhost:5739
+[metro] Logs for your project will appear below.
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓░░░░░░░░ 55.8% (1736/2324)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 99.9% (5163/5164)
+[metro] Web Bundled 9322ms packages/app/index.ts (5165 modules)
+[e2e] Metro warmed on port 5739
+
+Running 1 test using 1 worker
+
+[e2e] Worker 0 daemon started on port 24149, home: /tmp/paseo-e2e-worker-0-ziDoP4
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 794ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro]  LOG  [web] Logs will appear in the browser console
+[metro] Web Bundled 583ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (86 modules)
+  ✓  1 [browser] › e2e/browser/changes-pane.spec.ts:341:5 › Diff Find stays isolated from terminal Find and shell input (33.7s)
+[e2e] Worker 0 daemon stopped
+[e2e] Metro stopped
+
+  1 passed (1.4m)
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 3min 27.579s
+CPU time consumed: 3min 22.079s
+Memory peak: 101.2M
+Memory swap peak: 0B
+Observed cgroup peak: 2946.0 MiB; OOM kills: 0
+
+Finished: 2026-09-18T01:25:26+00:00
+Exit: 0

@@ -1,11 +1,21 @@
 # Diff Find on current main
 
 Feature commit: `7ba666dc6686228538881996b1fdd1c3ce1ecb35`.
+Test-readability follow-up / current head: `81a07ed7370e495534850493a98f384eb393b8cd`.
 Base: `bb4763b38cb6d8e26b0eca54088fb14ce899ec68`.
 
 The 16-scenario verification was completed on `047f40e6`. Main then added only the chat Find capture-phase fix (#4991). After rebasing, full-workspace format/lint/typecheck and all 97 targeted unit tests passed again; the Diff highlight and chat/terminal coexistence cases also passed, with normal chat activation and no explicit content-focus workaround.
 
-This is the shared PaneFind implementation rebased onto main after #4589, #4650 and #4765 merged. The feature is one commit; the old replay stack and local test-runner configuration are not included.
+This is the shared PaneFind implementation rebased onto main after #4589, #4650 and #4765 merged. The old replay stack and local test-runner configuration are not included.
+
+## Review follow-up: readable E2E journeys
+
+The eight Diff Find test bodies now contain 6–8 user-level statements. Common Find actions and neighboring-pane interactions live in `e2e/support/helpers/diff-find.ts`; existing canvas paint sampling and mouse-drag primitives are shared through `diff-source.ts`. Scenario setup stays in the owning spec and preserves its existing real-daemon/repository cleanup. No production files changed.
+
+Highlighting/clearing and selection preservation were split into separate scenarios; all original behavior assertions remain. Thirteen focused real-browser cases passed, including the eight Find journeys and five existing selection/review cases using the extracted primitives. The terminal case passed again after restoring its initial-query independence assertion in the helper. All-workspace format/lint/typecheck passed. Tests still run under the same 3GiB hard cap; no cgroup OOM kills.
+
+- [13-case browser regression output](review-followup-browser.txt)
+- [Final static checks and terminal regression output](review-followup-final.txt)
 
 ## Verified
 

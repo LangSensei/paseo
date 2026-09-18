@@ -1,0 +1,119 @@
+Started: 2026-09-18T01:10:51+00:00
+Worktree: $WORKTREE
+Unit: paseo-diff-test-20260918T011051Z-674819
+Command: env NODE_OPTIONS=--max-old-space-size=1536 E2E_RECORD_VIDEO=1 npm run test:e2e --workspace=@getpaseo/app -- e2e/browser/changes-pane.spec.ts --grep Diff\ Find\|selects\,\ preserves\,\ copies\,\ and\ dismisses\|copies\ only\ the\ selected\ split\ side\|horizontally\ scrolled\ selection\ copies\|clears\ a\ selection\ when\ collapsing\|creates\,\ cancels\,\ edits\,\ and\ deletes\ a\ review --workers=1 --timeout=120000
+Running as unit: paseo-diff-test-20260918T011051Z-674819.service; invocation ID: 588833c9465941aea55431ef6911aff6
+
+> @getpaseo/app@0.8.0 test:e2e
+> playwright test --project=browser e2e/browser/changes-pane.spec.ts --grep Diff Find|selects, preserves, copies, and dismisses|copies only the selected split side|horizontally scrolled selection copies|clears a selection when collapsing|creates, cancels, edits, and deletes a review --workers=1 --timeout=120000
+
+[metro] Starting project at $WORKTREE/packages/app
+[metro] Using src/app as the root directory for Expo Router.
+[metro] Experimental Expo Autolinking module resolver is enabled.
+[metro] React Compiler enabled
+[metro] Starting Metro Bundler
+[metro] Waiting on http://localhost:2541
+[metro] Logs for your project will appear below.
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓░░░░░░░░ 51.0% (1513/2118)
+[metro] Web packages/app/index.ts ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓░ 95.6% (4904/5031)
+[metro] Web Bundled 9989ms packages/app/index.ts (5165 modules)
+[e2e] Metro warmed on port 2541
+
+Running 13 tests using 1 worker
+
+[e2e] Worker 0 daemon started on port 3965, home: /tmp/paseo-e2e-worker-0-WhVU0q
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 492ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro]  LOG  [web] Logs will appear in the browser console
+[metro] Web Bundled 640ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (86 modules)
+  ✓   1 [browser] › e2e/browser/changes-pane.spec.ts:277:5 › Diff Find highlights and clears literal matches (32.2s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 452ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 75ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   2 [browser] › e2e/browser/changes-pane.spec.ts:288:5 › Diff Find preserves mouse selection when opening and closing (28.8s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 541ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 62ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   3 [browser] › e2e/browser/changes-pane.spec.ts:297:5 › Diff Find reaches collapsed offscreen files and keeps counts across layouts (29.3s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 399ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 34ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   4 [browser] › e2e/browser/changes-pane.spec.ts:308:5 › Diff Find reveals long-line matches horizontally and after wrapping (24.0s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 420ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 96ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   5 [browser] › e2e/browser/changes-pane.spec.ts:319:5 › Diff Find does not steal file Find in a neighboring pane (28.4s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 470ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 75ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   6 [browser] › e2e/browser/changes-pane.spec.ts:329:5 › Diff Find stays isolated from chat Find in a neighboring pane (33.2s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 404ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 47ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   7 [browser] › e2e/browser/changes-pane.spec.ts:341:5 › Diff Find stays isolated from terminal Find and shell input (29.7s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 489ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 86ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   8 [browser] › e2e/browser/changes-pane.spec.ts:351:5 › Diff Find invalidates live results and searches removed text (26.1s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 695ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 84ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓   9 [browser] › e2e/browser/changes-pane.spec.ts:1112:5 › creates, cancels, edits, and deletes a review while keeping Changes focused (25.5s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 534ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 41ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  10 [browser] › e2e/browser/changes-pane.spec.ts:1246:5 › selects, preserves, copies, and dismisses diff text without opening a review (27.1s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 540ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 49ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  11 [browser] › e2e/browser/changes-pane.spec.ts:1278:5 › canvas diff clears a selection when collapsing an earlier file (25.0s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 388ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 87ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  12 [browser] › e2e/browser/changes-pane.spec.ts:1307:5 › canvas diff copies only the selected split side (23.8s)
+[metro] Web packages/app/index.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 413ms packages/app/index.ts (1 module)
+[metro] Web packages/app/src/attachments/web/indexeddb-attachment-store.ts ░░░░░░░░░░░░░░░░  0.0% (0/1)
+[metro] Web Bundled 11ms packages/app/src/attachments/web/indexeddb-attachment-store.ts (1 module)
+[metro]  LOG  [web] Logs will appear in the browser console
+  ✓  13 [browser] › e2e/browser/changes-pane.spec.ts:1350:5 › horizontally scrolled selection copies exactly and does not paint the gutter (22.9s)
+[e2e] Worker 0 daemon stopped
+[e2e] Metro stopped
+
+  Slow test file: [browser] › e2e/browser/changes-pane.spec.ts (5.9m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  13 passed (6.9m)
+Finished with result: success
+Main processes terminated with: code=exited/status=0
+Service runtime: 6min 56.804s
+CPU time consumed: 6min 53.669s
+Memory peak: 111.3M
+Memory swap peak: 0B
+Observed cgroup peak: 2946.1 MiB; OOM kills: 0
+
+Finished: 2026-09-18T01:17:48+00:00
+Exit: 0
