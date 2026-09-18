@@ -14,6 +14,13 @@ import { runWorkspaceActionFromCommandCenter } from "../support/helpers/command-
 import { openAgentRoute, seedMockAgentWorkspace } from "../support/helpers/mock-agent";
 import { TerminalE2EHarness } from "../support/helpers/terminal-dsl";
 import { getTerminalBufferText } from "../support/helpers/terminal-perf";
+import {
+  diffFind,
+  fileFindNeighbor,
+  chatFindNeighbor,
+  terminalFindNeighbor,
+} from "../support/helpers/diff-find";
+import { dragExactAddedText, readSelectionPaintSamples } from "../support/helpers/diff-source";
 
 interface DirtyWorkspace {
   id: string;
@@ -267,243 +274,88 @@ test.afterEach(async () => {
   }
 });
 
-test("Diff Find paints literal matches without changing copy selection", async ({
-  page,
-}, testInfo) => {
-  await openCopyableSelectionDiff(page, "ABCDEFGHIJ ABCDEFGHIJ");
-  const scroller = page.getByTestId("git-diff-scroll");
-  await scroller.click({ position: { x: 10, y: 65 } });
-  const before = await readSelectionPaintSamples(page);
-  await page.keyboard.press("ControlOrMeta+f");
-  const find = page.getByTestId("diff-find");
-  const input = find.getByRole("textbox");
-  await expect(input).toBeFocused();
-  await input.fill("abcdefghij");
-  await expect(find.getByRole("status")).toHaveText("1 of 2");
-  await expect
-    .poll(async () => (await readSelectionPaintSamples(page)).code)
-    .not.toEqual(before.code);
-  expect((await readSelectionPaintSamples(page)).gutter).toEqual(before.gutter);
-  await input.press("Enter");
-  await expect(find.getByRole("status")).toHaveText("2 of 2");
-  await input.press("Shift+Enter");
-  await expect(find.getByRole("status")).toHaveText("1 of 2");
-  await testInfo.attach("diff-find-highlight", {
-    body: await page.screenshot({ path: testInfo.outputPath("diff-find-highlight.png") }),
-    contentType: "image/png",
-  });
-  await input.fill("not present");
-  await expect(find.getByRole("status")).toHaveText("No matches");
-  await expect.poll(async () => (await readSelectionPaintSamples(page)).code).toEqual(before.code);
-  await input.press("Escape");
-  await expect(find).toHaveCount(0);
-  await expect(scroller).toBeFocused();
-  await dragExactAddedText(page, { startOffset: 2, endOffset: 7 });
-  await page.keyboard.press("ControlOrMeta+f");
-  await input.fill("ABCDEFGHIJ");
-  await expect(find.getByRole("status")).toHaveText("1 of 2");
-  await input.press("Escape");
-  await copyDiffSelectionWithKeyboard(page);
-  await expectClipboardText(page, "CDEFG");
+test("Diff Find highlights and clears literal matches", async ({ page }, testInfo) => {
+  const review = await openTextDiffFind(page, "ABCDEFGHIJ ABCDEFGHIJ");
+  const original = await review.rememberAppearance();
+  await review.find("abcdefghij", "1 of 2");
+  await review.expectHighlightedSource(original);
+  await review.cycleMatches({ next: "2 of 2", previous: "1 of 2" });
+  await review.capture(testInfo, "diff-find-highlight");
+  await review.expectClearedHighlight("not present", original);
+  await review.close();
+});
+
+test("Diff Find preserves mouse selection when opening and closing", async ({ page }) => {
+  const review = await openTextDiffFind(page, "ABCDEFGHIJ ABCDEFGHIJ");
+  await review.find("not present", "No matches");
+  await review.close();
+  await review.selectText({ startOffset: 2, endOffset: 7 });
+  await review.find("ABCDEFGHIJ", "1 of 2");
+  await review.closeAndCopySelection("CDEFG");
 });
 
 test("Diff Find reaches collapsed offscreen files and keeps counts across layouts", async ({
   page,
 }, testInfo) => {
-  const workspace = await createWorkspaceWithManyTinyDiffs(40);
-  await configureDiffPresentation(page, { layout: "unified", wrapLines: false });
-  await openWorkspaceChangesSurface(page, workspace);
-  const panel = page.getByTestId("working-diff-panel").filter({ visible: true });
-  await panel.getByTestId("changes-toggle-collapse-all").click();
-  await panel.getByTestId("git-diff-scroll").click({ position: { x: 10, y: 5 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  const find = panel.getByTestId("diff-find");
-  await find.getByRole("textbox").fill("value = 37;");
-  await expect(find.getByRole("status")).toHaveText("1 of 1");
-  await expect(find.getByTestId("diff-find-active-file")).toHaveText("src/file-0036.ts");
-  const header = diffHeaderForPath(panel, "src/file-0036.ts");
-  await expect(header.getByTestId(/^diff-file-\d+-toggle$/)).toHaveAttribute(
-    "aria-expanded",
-    "true",
-  );
-  await expect(header).toBeVisible();
-  await expect
-    .poll(() => panel.getByTestId("git-diff-scroll").evaluate((element) => element.scrollTop))
-    .toBeGreaterThan(0);
-  await panel.getByTestId("changes-toggle-layout").click();
-  await expect(find.getByRole("status")).toHaveText("1 of 1");
-  await panel.getByTestId("changes-toggle-wrap-lines").click();
-  await expect(find.getByRole("status")).toHaveText("1 of 1");
-  await testInfo.attach("diff-find-collapsed-split", {
-    body: await page.screenshot({ path: testInfo.outputPath("diff-find-collapsed-split.png") }),
-    contentType: "image/png",
-  });
+  const review = await openCollapsedDiffFind(page, 40);
+  await review.find("value = 37;", "1 of 1");
+  await review.expectRevealedFile("src/file-0036.ts");
+  await review.switchToSplit("1 of 1");
+  await review.wrapLines("1 of 1");
+  await review.capture(testInfo, "diff-find-collapsed-split");
 });
 
 test("Diff Find reveals long-line matches horizontally and after wrapping", async ({
   page,
 }, testInfo) => {
-  await openCopyableSelectionDiff(page, `${"prefix ".repeat(200)}end_needle`);
-  await page.getByTestId("git-diff-scroll").click({ position: { x: 10, y: 65 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  const find = page.getByTestId("diff-find");
-  await find.getByRole("textbox").fill("end_needle");
-  await expect(find.getByRole("status")).toHaveText("1 of 1");
-  await expect
-    .poll(() =>
-      page.getByTestId("diff-file-0-horizontal-scroll").evaluate((element) => element.scrollLeft),
-    )
-    .toBeGreaterThan(500);
-  await testInfo.attach("diff-find-horizontal", {
-    body: await page.screenshot({ path: testInfo.outputPath("diff-find-horizontal.png") }),
-    contentType: "image/png",
-  });
-  await page.getByTestId("working-diff-panel").getByTestId("changes-toggle-wrap-lines").click();
-  await expect(page.getByTestId("diff-file-0-horizontal-scroll")).toHaveCount(0);
-  await expect(find.getByRole("status")).toHaveText("1 of 1");
-  await testInfo.attach("diff-find-wrapped", {
-    body: await page.screenshot({ path: testInfo.outputPath("diff-find-wrapped.png") }),
-    contentType: "image/png",
-  });
+  const review = await openTextDiffFind(page, `${"prefix ".repeat(200)}end_needle`);
+  await review.find("end_needle", "1 of 1");
+  await review.expectHorizontalReveal();
+  await review.capture(testInfo, "diff-find-horizontal");
+  await review.wrapLines("1 of 1");
+  await review.capture(testInfo, "diff-find-wrapped");
 });
 
 test("Diff Find does not steal file Find in a neighboring pane", async ({ page }) => {
-  const workspace = await createWorkspaceWithExactSelectionDiff("diffneedle");
-  await writeFile(path.join(workspace.repoPath, "other.txt"), "file needle\n");
-  await configureDiffPresentation(page, { layout: "unified", wrapLines: false });
-  await openSelectionWorkspaceChanges(page, workspace);
-  await runWorkspaceActionFromCommandCenter(page, "Split pane right");
-  await openFileExplorer(page);
-  await openFileFromExplorer(page, "other.txt");
-  const source = page
-    .getByTestId("file-source-editor")
-    .filter({ visible: true })
-    .locator(".cm-content");
-  await expect(source).toContainText("file needle");
-  await source.click();
-  await source.press("ControlOrMeta+f");
-  await expect(page.getByTestId("diff-find")).toHaveCount(0);
-  await page.keyboard.press("Escape");
-  await page.getByTestId("git-diff-scroll").click({ position: { x: 10, y: 65 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  const diffInput = page.getByTestId("diff-find").getByRole("textbox");
-  await diffInput.fill("diffneedle");
-  await expect(page.getByTestId("diff-find").getByRole("status")).toHaveText("1 of 1");
-  await source.click();
-  await source.press("ControlOrMeta+f");
-  await expect(diffInput).not.toBeFocused();
-  await expect(diffInput).toHaveValue("diffneedle");
+  const { review, file } = await openDiffBesideFile(page);
+  await file.openFind();
+  await review.expectClosed();
+  await file.closeFind();
+  await review.find("diffneedle", "1 of 1");
+  await file.openFind();
+  await review.expectInactiveQuery("diffneedle", "1 of 1");
 });
 
 test("Diff Find stays isolated from chat Find in a neighboring pane", async ({
   page,
 }, testInfo) => {
-  const agent = await seedMockAgentWorkspace({
-    repoPrefix: "diff-chat-find-",
-    title: "Chat and Diff Find",
-    featureValues: { mockAssistantResponse: "Chat has chatneedle here." },
-  });
-  cleanupTasks.push({ run: agent.cleanup });
-  await agent.client.sendAgentMessage(agent.agentId, "Respond");
-  await agent.client.waitForFinish(agent.agentId, 15_000);
-  await writeFile(path.join(agent.cwd, "search.txt"), "diffneedle\n");
-  await page.setViewportSize({ width: 1600, height: 900 });
-  await openAgentRoute(page, agent);
-  const assistant = page.getByTestId("assistant-message").filter({ visible: true }).last();
-  await expect(assistant).toContainText("chatneedle");
-  await runWorkspaceActionFromCommandCenter(page, "Split pane right");
-  await openChangesPanel(page);
-  await expect(assistant).toBeVisible();
-  const scroller = page.getByTestId("git-diff-scroll");
-  await scroller.click({ position: { x: 10, y: 65 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  const diff = page.getByTestId("diff-find");
-  await diff.getByRole("textbox").fill("diffneedle");
-  await expect(diff.getByRole("status")).toHaveText("1 of 1");
-  await assistant.click();
-  await page.keyboard.press("ControlOrMeta+f");
-  const chat = page.locator('[data-chat-find-widget="true"]');
-  await expect(chat.getByRole("textbox")).toBeFocused();
-  await chat.getByRole("textbox").fill("chatneedle");
-  await expect(chat.getByRole("status")).toHaveText("1 of 1 in message");
-  await expect(diff.getByRole("textbox")).toHaveValue("diffneedle");
-  await scroller.click({ position: { x: 10, y: 65 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  await expect(diff.getByRole("textbox")).toBeFocused();
-  await expect(chat.getByRole("textbox")).toHaveValue("chatneedle");
-  await page.screenshot({ path: testInfo.outputPath("diff-chat-find.png") });
+  const { review, chat } = await openDiffBesideChat(page);
+  await review.find("diffneedle", "1 of 1");
+  await chat.find("chatneedle", "1 of 1 in message");
+  await review.expectInactiveQuery("diffneedle", "1 of 1");
+  await review.refocus();
+  await chat.expectQuery("chatneedle");
+  await review.capture(testInfo, "diff-chat-find");
 });
 
 test("Diff Find stays isolated from terminal Find and shell input", async ({ page }, testInfo) => {
-  const harness = await TerminalE2EHarness.create({ tempPrefix: "diff-terminal-find-" });
-  cleanupTasks.push({ run: () => harness.cleanup() });
-  const received = path.join(harness.tempRepo.path, "received.txt");
-  await writeFile(path.join(harness.tempRepo.path, "search.txt"), "diffneedle\n");
-  const terminal = await harness.createTerminal({
-    name: "Terminal and Diff Find",
-    command: "bash",
-    args: [
-      "--noprofile",
-      "--norc",
-      "-c",
-      "stty -echo; printf 'terminalneedle\\nREADY\\n'; while IFS= read -r line; do printf '%s\\n' \"$line\" >> received.txt; done",
-    ],
-  });
-  await page.setViewportSize({ width: 1600, height: 900 });
-  await harness.openTerminal(page, { terminalId: terminal.id });
-  await expect.poll(() => getTerminalBufferText(page)).toContain("READY");
-  await runWorkspaceActionFromCommandCenter(page, "Split pane right");
-  await openChangesPanel(page);
-  const term = page.getByTestId("terminal-surface").filter({ visible: true });
-  const shell = term.locator(".xterm-helper-textarea");
-  const scroller = page.getByTestId("git-diff-scroll");
-  await scroller.click({ position: { x: 10, y: 65 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  const diff = page.getByTestId("diff-find");
-  await diff.getByRole("textbox").fill("diffneedle");
-  await expect(diff.getByRole("status")).toHaveText("1 of 1");
-  await term.click();
-  await shell.press("ControlOrMeta+f");
-  const terminalQuery = page
-    .getByRole("textbox", { name: "Find in pane", exact: true })
-    .filter({ visible: true });
-  const focusedQuery = page.locator("input:focus");
-  await expect(focusedQuery).not.toHaveValue("diffneedle");
-  await expect(terminalQuery).toHaveCount(2);
-  await focusedQuery.fill("terminalneedle");
-  await expect(diff.getByRole("textbox")).toHaveValue("diffneedle");
-  await expect(
-    page.getByRole("status", { name: "Find matches" }).filter({ visible: true }),
-  ).toHaveText(["1 of 1", "1 of 1"]);
-  await page.keyboard.press("Escape");
-  await expect(shell).toBeFocused();
-  await shell.pressSequentially("ordinary-input");
-  await shell.press("Enter");
-  await expect.poll(() => readFileIfPresent(received)).toBe("ordinary-input\n");
-  await scroller.click({ position: { x: 10, y: 65 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  await expect(diff.getByRole("textbox")).toBeFocused();
-  await page.screenshot({ path: testInfo.outputPath("diff-terminal-find.png") });
+  const { review, terminal } = await openDiffBesideTerminal(page);
+  await review.find("diffneedle", "1 of 1");
+  await terminal.find("terminalneedle", "1 of 1");
+  await review.expectInactiveQuery("diffneedle", "1 of 1");
+  await terminal.submitOnlyShellInput("ordinary-input");
+  await review.refocus();
+  await review.capture(testInfo, "diff-terminal-find");
 });
 
 test("Diff Find invalidates live results and searches removed text", async ({ page }) => {
-  const workspace = await createWorkspaceWithMountedTabDiff({ includeDeletedFile: true });
-  await openWorkspaceChanges(page, workspace);
-  const panel = page.getByTestId("working-diff-panel").filter({ visible: true });
-  await panel.getByTestId("git-diff-scroll").click({ position: { x: 10, y: 65 } });
-  await page.keyboard.press("ControlOrMeta+f");
-  const find = panel.getByTestId("diff-find");
-  const input = find.getByRole("textbox");
-  await input.fill("export const deleted");
-  await expect(find.getByRole("status")).toHaveText("1 of 1");
-  await expect(find.getByTestId("diff-find-active-file")).toHaveText("src/zz-deleted.ts");
-  await input.fill("liveSearchNeedle");
-  await expect(find.getByRole("status")).toHaveText("No matches");
-  await writeFile(path.join(workspace.repoPath, "live.txt"), "liveSearchNeedle\n");
-  await expect(find.getByRole("status")).toHaveText("1 of 1", { timeout: 30_000 });
-  await expect(find.getByTestId("diff-find-active-file")).toHaveText("live.txt");
-  await unlink(path.join(workspace.repoPath, "live.txt"));
-  await expect(find.getByRole("status")).toHaveText("No matches", { timeout: 30_000 });
+  const scene = await openLiveDiffFind(page);
+  await scene.review.findSingleMatch("export const deleted", "src/zz-deleted.ts");
+  await scene.review.changeQuery("liveSearchNeedle", "No matches");
+  await scene.addFile("live.txt", "liveSearchNeedle\n");
+  await scene.review.expectSingleMatch("live.txt");
+  await scene.removeFile("live.txt");
+  await scene.review.expectNoMatches();
 });
 
 test("Changes opens the populated committed comparison for a clean checkout", async ({ page }) => {
@@ -1687,6 +1539,90 @@ async function expectVisibleDiffRowsShareTypography(page: Page): Promise<void> {
   await expect(page.locator('[data-testid^="diff-code-row-"]')).toHaveCount(0);
 }
 
+async function openTextDiffFind(page: Page, content: string) {
+  await openCopyableSelectionDiff(page, content);
+  return diffFind(page);
+}
+
+async function openCollapsedDiffFind(page: Page, fileCount: number) {
+  const workspace = await createWorkspaceWithManyTinyDiffs(fileCount);
+  await configureDiffPresentation(page, { layout: "unified", wrapLines: false });
+  await openWorkspaceChangesSurface(page, workspace);
+  const review = diffFind(page);
+  await review.collapseFiles();
+  return review;
+}
+
+async function openDiffBesideFile(page: Page) {
+  const workspace = await createWorkspaceWithExactSelectionDiff("diffneedle");
+  await writeFile(path.join(workspace.repoPath, "other.txt"), "file needle\n");
+  await configureDiffPresentation(page, { layout: "unified", wrapLines: false });
+  await openSelectionWorkspaceChanges(page, workspace);
+  await runWorkspaceActionFromCommandCenter(page, "Split pane right");
+  await openFileExplorer(page);
+  await openFileFromExplorer(page, "other.txt");
+  const file = fileFindNeighbor(page);
+  await file.expectContent("file needle");
+  return { review: diffFind(page), file };
+}
+
+async function openDiffBesideChat(page: Page) {
+  const agent = await seedMockAgentWorkspace({
+    repoPrefix: "diff-chat-find-",
+    title: "Chat and Diff Find",
+    featureValues: { mockAssistantResponse: "Chat has chatneedle here." },
+  });
+  cleanupTasks.push({ run: agent.cleanup });
+  await agent.client.sendAgentMessage(agent.agentId, "Respond");
+  await agent.client.waitForFinish(agent.agentId, 15_000);
+  await writeFile(path.join(agent.cwd, "search.txt"), "diffneedle\n");
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await openAgentRoute(page, agent);
+  const chat = chatFindNeighbor(page);
+  await chat.expectResponse("chatneedle");
+  await runWorkspaceActionFromCommandCenter(page, "Split pane right");
+  await openChangesPanel(page);
+  await chat.expectResponse("chatneedle");
+  return { review: diffFind(page), chat };
+}
+
+async function openDiffBesideTerminal(page: Page) {
+  const harness = await TerminalE2EHarness.create({ tempPrefix: "diff-terminal-find-" });
+  cleanupTasks.push({ run: () => harness.cleanup() });
+  const received = path.join(harness.tempRepo.path, "received.txt");
+  await writeFile(path.join(harness.tempRepo.path, "search.txt"), "diffneedle\n");
+  const terminal = await harness.createTerminal({
+    name: "Terminal and Diff Find",
+    command: "bash",
+    args: [
+      "--noprofile",
+      "--norc",
+      "-c",
+      "stty -echo; printf 'terminalneedle\\nREADY\\n'; while IFS= read -r line; do printf '%s\\n' \"$line\" >> received.txt; done",
+    ],
+  });
+  await page.setViewportSize({ width: 1600, height: 900 });
+  await harness.openTerminal(page, { terminalId: terminal.id });
+  await expect.poll(() => getTerminalBufferText(page)).toContain("READY");
+  await runWorkspaceActionFromCommandCenter(page, "Split pane right");
+  await openChangesPanel(page);
+  return { review: diffFind(page), terminal: terminalFindNeighbor(page, received) };
+}
+
+async function openLiveDiffFind(page: Page) {
+  const workspace = await createWorkspaceWithMountedTabDiff({ includeDeletedFile: true });
+  await openWorkspaceChanges(page, workspace);
+  return {
+    review: diffFind(page),
+    addFile(name: string, content: string) {
+      return writeFile(path.join(workspace.repoPath, name), content);
+    },
+    removeFile(name: string) {
+      return unlink(path.join(workspace.repoPath, name));
+    },
+  };
+}
+
 async function createWorkspaceWithMountedTabDiff(
   options: WorkspaceFixtureOptions = {},
 ): Promise<DirtyWorkspace> {
@@ -2205,41 +2141,6 @@ async function deleteInlineReview(page: Page): Promise<void> {
   await expect(page.getByTestId(/^review-comment-delete-/)).toHaveCount(0);
 }
 
-async function dragExactAddedText(
-  page: Page,
-  offsets: { startOffset: number; endOffset: number },
-  fileIndex = 0,
-): Promise<void> {
-  const body = page.getByTestId(`diff-file-${fileIndex}-body`);
-  const canvas = page.getByTestId("git-diff-canvas");
-  const [bodyBounds, metrics] = await Promise.all([
-    body.boundingBox(),
-    canvas.evaluate((element) => {
-      const style = getComputedStyle(element);
-      const fontSize = Number.parseFloat(style.fontSize);
-      const measurementCanvas = document.createElement("canvas");
-      const context = measurementCanvas.getContext("2d")!;
-      context.font = `${fontSize}px ${style.fontFamily}`;
-      return { fontSize, characterWidth: context.measureText("A").width };
-    }),
-  ]);
-  if (!bodyBounds) throw new Error("Expanded diff body has no bounds");
-  const lineHeight = Math.round(metrics.fontSize * 1.5);
-  const gutterWidth = Math.max(2, String(1).length) * Math.ceil(metrics.fontSize * 0.62) + 12;
-  const textLeft = bodyBounds.x + gutterWidth + 8;
-  await page.mouse.move(
-    textLeft + offsets.startOffset * metrics.characterWidth + 1,
-    bodyBounds.y + lineHeight * 1.5,
-  );
-  await page.mouse.down();
-  await page.mouse.move(
-    textLeft + offsets.endOffset * metrics.characterWidth - 1,
-    bodyBounds.y + lineHeight * 1.5,
-    { steps: 8 },
-  );
-  await page.mouse.up();
-}
-
 async function dragAddedTextRange(
   page: Page,
   input: {
@@ -2298,36 +2199,6 @@ async function dragAddedTextRange(
   await page.mouse.down();
   await page.mouse.move(end.x, end.y, { steps: 12 });
   await page.mouse.up();
-}
-
-async function readSelectionPaintSamples(
-  page: Page,
-  side: "unified" | "right" = "unified",
-): Promise<{ gutter: number[]; code: number[]; opposite: number[] }> {
-  return page.getByTestId("diff-file-0-body").evaluate((body, selectedSide) => {
-    const canvas = document.querySelector<HTMLCanvasElement>('[data-testid="git-diff-canvas"]')!;
-    const bodyBounds = body.getBoundingClientRect();
-    const canvasBounds = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / canvasBounds.width;
-    const scaleY = canvas.height / canvasBounds.height;
-    const context = canvas.getContext("2d")!;
-    const sample = (left: number, top: number, width: number, height: number) =>
-      Array.from(
-        context.getImageData(
-          Math.round((left - canvasBounds.left) * scaleX),
-          Math.round((top - canvasBounds.top) * scaleY),
-          Math.max(1, Math.round(width * scaleX)),
-          Math.max(1, Math.round(height * scaleY)),
-        ).data,
-      );
-    const columnLeft =
-      selectedSide === "right" ? bodyBounds.left + bodyBounds.width / 2 : bodyBounds.left;
-    return {
-      gutter: sample(columnLeft + 2, bodyBounds.top + 24, 8, 8),
-      code: sample(columnLeft + 80, bodyBounds.top + 24, 80, 10),
-      opposite: sample(bodyBounds.left + 80, bodyBounds.top + 24, 80, 10),
-    };
-  }, side);
 }
 
 async function dragWithinFirstAddedGrapheme(page: Page): Promise<void> {
